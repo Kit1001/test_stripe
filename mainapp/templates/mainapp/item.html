@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="{% static "mainapp/item.css" %}">
+  <script src="https://js.stripe.com/v3/"></script>
+
+</head>
+<body>
+
+<div class="item-container">
+  <img src="{{ product.image.url }}" alt="">
+  <div class="text">
+    <h2>{{ product.name }}</h2>
+    <p>{{ product.description }}</p>
+      <input type="button" value="Купить" onclick="buy('{{ product.id }}')">
+    <p>{{ product.price }} RUB</p>
+  </div>
+
+</div>
+
+<script>
+  const stripe = Stripe('pk_test_51LfpHZJtMpkSmDUEaX2NJjIpS4zclwtj4jmT3hNIfMi5ldhQtINLEzfsvTHfAHSb8kbCdrTQJYbI7xP9mfcL5xSZ00UX40zcHq');
+  const buy = (productId) => {
+    fetch(`/buy/${productId}`)
+      .then((response) => response.json())
+      .then((session) => {
+        stripe.redirectToCheckout({sessionId: session.id})
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+</script>
+</body>
+</html>
