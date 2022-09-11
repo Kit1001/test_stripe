@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -6,19 +7,79 @@
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>TestShopStripe</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="{% static "mainapp/item.css" %}">
+  <link rel="stylesheet" href="{% static "mainapp/index.css" %}">
+  <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
 <header>
-  <ul class="menu-bar">
-    <li class="menu-element cart">
-      <img src="imgs/cart.svg" alt="cart icon" class="menu-cart-icon">
-    </li>
-  </ul>
+  <div class="cart-container">
+    <span id="counter" class="cart-count"></span>
+    <img src="{% static "mainapp/cart.svg" %}" alt="cart icon" class="cart-icon">
+  </div>
 </header>
 <main>
-  <div class="goods-list"></div>
+  <ul class="showcase">
+    {% for product in products %}
+      <li class="showcase-item">
+        <div class="item-container">
+          <img src="{{ product.image.url }}" alt="">
+          <div class="text">
+            <h2>{{ product.name }}</h2>
+            <p>{{ product.description }}</p>
+            <p>{{ product.price }} RUB</p>
+            <input type="button" value="В корзину" onclick="addToCart('{{ product.id }}')">
+            <input type="button" value="Подробнее" onclick="location.href = '/item/{{ product.id }}'">
+
+          </div>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
 </main>
 </body>
-<script src="script.js"></script>
+{% csrf_token %}
+<script>
+  const productsJS = JSON.parse("{{ products_json | escapejs }}");
+  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+  const stripe = Stripe('{{ stripe_key }}');
+
+  const addToCart = (id) => {
+    if (productsJS[id].quantity) {
+      productsJS[id].quantity++;
+    } else {
+      productsJS[id].quantity = 1;
+    }
+
+    document.querySelector('#counter').innerText = getCartItemsCount();
+  };
+
+  const getCartItemsCount = () => {
+    let itemsCount = 0;
+    for (const pId in productsJS) {
+      const q = productsJS[pId].quantity;
+      if (q) {
+        itemsCount += q;
+      }
+    }
+    return itemsCount;
+  }
+
+  document.querySelector('.cart-icon').addEventListener('click', () => {
+    fetch('/buy_order', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken
+      },
+      body: JSON.stringify(productsJS)
+    }).then((response) => response.json())
+      .then((session) => {
+        stripe.redirectToCheckout({sessionId: session.id})
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  })
+</script>
 </html>

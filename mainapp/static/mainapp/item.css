@@ -1,14 +1,14 @@
 body{
-    /*background-color: #dadada;*/
+    /*background-color: black;*/
 }
 
 .item-container{
-    margin: 0 auto;
+    margin: 100px auto;
     display: flex;
     width: 600px;
     height: 300px;
     overflow: hidden;
-    background-color: #f6f6f6;
+    background-color: #eeeeee;
     border-radius: 15px;
     box-shadow: 2px 4px 8px rgba(0,0,0,0.35);
 }
@@ -20,17 +20,18 @@ body{
 }
 
 .item-container .text{
-    margin: 0 auto;
+    margin: 1rem auto;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: flex-start;
     align-items: center;
 }
 
 .item-container input{
+    margin-top: 10px;
     width: 150px;
     height: 50px;
-    font-size: 2rem;
+    font-size: 1.5rem;
     border-radius: 10px;
     box-shadow: 0 1px 4px black;
 }

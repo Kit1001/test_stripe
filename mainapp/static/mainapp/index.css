@@ -1,0 +1,32 @@
+.cart-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    /*filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);*/
+}
+
+#counter{
+    font-size: 5rem;
+    margin-right: 20px;
+}
+
+.cart-icon {
+    height: 100px;
+    width: 100px;
+    margin-right: 50px;
+}
+
+.showcase {
+    width: 1300px;
+    margin: auto;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    /*background-color: blue;*/
+}
+
+.item-container {
+    margin: 10px 25px
+}
