@@ -48,10 +48,13 @@ def buy(request, pk):
         "product_data": product_data,
     }
 
+    tax_rates = [tax.tax_id for tax in product.taxes.all()]
+
     session = stripe.checkout.Session.create(
         line_items=[
             {"quantity": 1,
              "price_data": price_data,
+             "tax_rates": tax_rates
              },
         ],
         mode='payment',
@@ -63,7 +66,9 @@ def buy(request, pk):
 
 
 def buy_order(request):
-    products = json.loads(request.body)
+    body = json.loads(request.body)
+    products = body['productsJS']
+    discount_checkbox = body['discount']
     line_items = []
     for p_id in products:
         quantity = products[p_id].get('quantity')
@@ -79,6 +84,7 @@ def buy_order(request):
                                  'images': [f'{request.build_absolute_uri("/")}{product.image.url}'],
                              },
                          },
+                         "tax_rates": [tax.tax_id for tax in product.taxes.all()]
                          }
             line_items.append(line_item)
 
@@ -90,6 +96,7 @@ def buy_order(request):
         mode='payment',
         success_url=f'{request.build_absolute_uri(f"/success_order/{order.id}")}',
         cancel_url=f'{request.build_absolute_uri("/")}',
+        discounts=[{"coupon": "l8VUPHsL"}] if discount_checkbox else []
     )
 
     return JsonResponse(session)

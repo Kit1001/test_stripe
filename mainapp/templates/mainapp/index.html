@@ -14,6 +14,8 @@
 <body>
 <header>
   <div class="cart-container">
+    <input type="checkbox" id="discount">
+    <label for="discount">Применить скидку</label>
     <span id="counter" class="cart-count"></span>
     <img src="{% static "mainapp/cart.svg" %}" alt="cart icon" class="cart-icon">
   </div>
@@ -66,13 +68,15 @@
   }
 
   document.querySelector('.cart-icon').addEventListener('click', () => {
+    const discount = document.querySelector('#discount').checked
+    const body = {productsJS, discount}
     fetch('/buy_order', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'X-CSRFToken': csrftoken
       },
-      body: JSON.stringify(productsJS)
+      body: JSON.stringify(body)
     }).then((response) => response.json())
       .then((session) => {
         stripe.redirectToCheckout({sessionId: session.id})
