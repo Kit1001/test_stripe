@@ -124,6 +124,9 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_ROOT = BASE_DIR / "uploads"
-MEDIA_URL = "/files/"
+MEDIA_URL = "/uploads/"
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
+STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY")

@@ -1,0 +1,14 @@
+.container{
+    background-color: blue;
+    object-fit: contain;
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+}
+
+.item{
+    margin: 10px 25px;
+    height: 300px;
+    width: 700px;
+    background-color: red;
+}
