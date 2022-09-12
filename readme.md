@@ -9,4 +9,4 @@
 4. Создаем образ из файлов проекта  
 `docker build . -t teststripe`  
 5. Создаем и запускаем контейнер из полученного образа  
-`docker run -d -p 80:80 teststripe`
+`docker run -d -p 80:80 --env-file keys.env teststripe`
