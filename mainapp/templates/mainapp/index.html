@@ -17,7 +17,10 @@
     <input type="checkbox" id="discount">
     <label for="discount">Применить скидку</label>
     <span id="counter" class="cart-count"></span>
+    <div class="buy-button-container">
     <img src="{% static "mainapp/cart.svg" %}" alt="cart icon" class="cart-icon">
+      <button onclick="buy_order()">Купить</button>
+    </div>
   </div>
 </header>
 <main>
@@ -67,7 +70,7 @@
     return itemsCount;
   }
 
-  document.querySelector('.cart-icon').addEventListener('click', () => {
+  const buy_order =  () => {
     const discount = document.querySelector('#discount').checked
     const body = {productsJS, discount}
     fetch('/buy_order', {
@@ -84,6 +87,6 @@
       .catch((error) => {
         console.log(error)
       })
-  })
+  }
 </script>
 </html>
